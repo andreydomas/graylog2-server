@@ -1,0 +1,5 @@
+graylog2-server (0.9.6-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Andrey Domas <andrey.domas@gmail.com>  Tue, 22 Jan 2013 11:22:05 +0400

@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+export JAVA_HOME=/usr/lib/jvm/default-java
+
+# fakeroot workaround
+MAVEN_OPTS += -Dmaven.repo.local=${HOME}/.m2/repository
+export MAVEN_OPTS
+
+%:
+	dh $@
+
+syslog4j:
+	mvn install:install-file -DgroupId=org.syslog4j -DartifactId=syslog4j -Dversion=0.9.46 -Dpackaging=jar -Dfile=lib/syslog4j-0.9.46-bin.jar
+
+override_dh_auto_clean: syslog4j
+	rm -f target/graylog2-server.jar
+	rm -f debian/graylog2-server.init
+	mvn clean
+
+override_dh_auto_build: syslog4j
+	mvn assembly:assembly
+	cp target/graylog2-server-0.9.6-jar-with-dependencies.jar target/graylog2-server.jar
+	cp contrib/distro/generic/graylog2-server.init.d debian/graylog2-server.init
+
+override_dh_auto_install:
+override_dh_auto_test:
